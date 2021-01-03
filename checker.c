@@ -30,7 +30,7 @@ void	ft_print_error(int error, t_st *infix, t_st *expr)
 		write(1, ": invalid number ", 17); 
 	write(1, "(error token is \"", 17);
 	ft_print_arx_token(infix);
-	write(1, "\")", 2);
+	write(1, "\")\n", 3);
 }
 
 static int	ft_operator_check(t_st *infix, t_st *begin)
@@ -38,15 +38,15 @@ static int	ft_operator_check(t_st *infix, t_st *begin)
 	t_st	*tmp;
 
 	tmp = ft_skip_space(infix->prev, 0);
-	if (!tmp || (ft_strequ(tmp->type, "operator") && \
-	(tmp->op[0] != 'p' && tmp->op[0] != 's' && tmp->op[0] != 'u')))
+
+	if ((!tmp || ft_strequ(tmp->type, "operator")) && \
+	(infix->op[0] != 'p' && infix->op[0] != 'u' && infix->op[0] != '('))	
 	{
 		ft_print_error(OPEXP, infix, begin);
 		return (0);
 	}
 	tmp = ft_skip_space(infix->next, 1);	
-	if (!tmp || (ft_strequ(tmp->type, "operator") && \
-	(tmp->op[0] != 'p' && tmp->op[0] != 's' && tmp->op[0] != 'u')))
+	if (!tmp && infix->op[0] != 's')
 	{
 		ft_print_error(OPEXP, infix, begin);
 		return (0);

@@ -25,16 +25,22 @@ LIB = libft/libft.a
 all: $(NAME)
 	
 $(NAME):
-	make -C ./libft
-	gcc -Wextra -Werror -Wall -c $(SRC)
-	gcc -o $(NAME) -Wextra -Werror -Wall $(OBJECTS) $(LIB) -I $(INC)
+	@echo "Compiling library"
+	@make -C ./libft
+	@echo "Compiling arx"
+	@gcc -Wextra -Werror -Wall -c $(SRC)
+	@gcc -o $(NAME) -Wextra -Werror -Wall $(OBJECTS) $(LIB) -I $(INC)
 
 clean:
-	make clean -C libft/
-	rm -f $(OBJECTS)
+	@echo "Removing libft object files"
+	@make clean -C libft/
+	@echo "Removing arx object files"
+	@rm -f $(OBJECTS)
 
 fclean: clean
-	make fclean -C libft/
-	rm -f $(NAME)
+	@echo "Removing libft library file"
+	@make fclean -C libft/
+	@echo "Removing arx executable file"
+	@rm -f $(NAME)
 
 re: fclean all
