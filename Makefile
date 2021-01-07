@@ -3,9 +3,10 @@ SRC = arx.c \
 base.c \
 calc.c \
 checker.c \
-checker_op.c \
+error.c \
 extolst.c \
 intvar.c \
+operand.c \
 plusminus.c \
 postfix.c \
 utils.c
@@ -13,9 +14,10 @@ OBJECTS = arx.o \
 base.o \
 calc.o \
 checker.o \
-checker_op.o \
+error.o \
 extolst.o \
 intvar.o \
+operand.o \
 plusminus.o \
 postfix.o \
 utils.o
@@ -28,7 +30,7 @@ $(NAME):
 	@echo "Compiling library"
 	@make -C ./libft
 	@echo "Compiling arx"
-	@gcc -Wextra -Werror -Wall -c $(SRC)
+	@gcc -g -Wextra -Werror -Wall -c $(SRC)
 	@gcc -o $(NAME) -Wextra -Werror -Wall $(OBJECTS) $(LIB) -I $(INC)
 
 clean:

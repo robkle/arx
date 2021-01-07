@@ -11,6 +11,7 @@
 #define OPEXP 3
 #define INVBA 4
 #define INVNU 5
+#define SNERR 6
 
 typedef struct	s_st
 {
@@ -38,7 +39,8 @@ char	**g_iv;
 /*
 ** base.c
 */
-int		ft_base(t_st *infix, t_st *begin);
+int		ft_base(t_st *infix, t_st *begin, int calc);
+void	ft_base_calc(t_st *infix);
 
 /* 
 ** calc.c 
@@ -49,12 +51,11 @@ int		ft_calc(t_st *postfix);
 ** checker.c 
 */
 t_st	*ft_infix_checker(t_st *infix);
-void	ft_print_error(int error, t_st *infix, t_st *expr);
 
-/* 
-** checker_op.c 
+/*
+** error.c
 */
-void	ft_operand(t_st **infix);
+void	ft_print_error(int error, t_st *infix, t_st *expr);
 
 /* 
 ** extolst.c 
@@ -66,6 +67,11 @@ t_st	*ft_extolst(char *exp);
 ** intvar.c
 */
 void	ft_intvar(t_st *stack, char *op);
+
+/*
+** operand.c
+*/
+void	ft_operand(t_st **infix);
 
 /* 
 ** plusminus.c 

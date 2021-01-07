@@ -60,7 +60,8 @@ t_st	*ft_extolst(char *exp)
 			ft_push_lst(&infix, op, NULL);
 			ft_bzero(op, 64);
 		}
-		if (buf[0] && ft_operator(exp[i + 1]))
+		if (buf[0] && !(ft_isalnum(exp[i + 1]) || exp [i + 1] == '_' || \
+		exp[i + 1] == '#' || exp[i + 1] == '@'))
 		{
 			ft_push_lst(&infix, buf, NULL);
 			ft_bzero(buf, 13);

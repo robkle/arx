@@ -24,35 +24,6 @@ int	ft_operator_str(char *op)
 		return (1);
 	return (0);
 }
-	
-/**
-	prcd (op, '(' ) = FALSE
-	prcd ('(', op ) = FALSE,
-	prcd(op, ')') = TRUE,  except op = '('
-	prcd('(', ')') = FALSE, we should push, however instead of PUSH we will pop
-*/
-/*static int	ft_prcd(char left, char right)
-{
-	if (left == '(' || right == '(')
-		return (0);
-	if (right == ')')
-		return (1);
-	if (left == '*' || left == '/')
-	{
-		if (right == '*' ||  right == '/' || right == '+' || right == '-')
-			return (1);
-		else 
-			return (0);
-	}
-	if (left == '+' || left == '-')
-	{
-		if (right == '+' || right == '-')
-			return (1);
-		else 
-			return (0);
-	}
-	return (0);
-}*/
 
 static t_pr	ft_pr_assign(char *op)
 {

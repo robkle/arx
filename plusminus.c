@@ -3,7 +3,6 @@
 /*static int	ft_pm_error(t_st *infix)
 {
 	t_st	*tmp;
-
 	while (infix)
 	{
 		if (((ft_strequ(infix->op, "p++") || ft_strequ(infix->op, "p--")) && \

@@ -1,55 +1,77 @@
 #include "arx.h"
 #include <stdio.h>
 
-static void	ft_print_arx_token(t_st *lst)
+static int	ft_operand_check(t_st *infix, t_st *begin)
 {
-	while (lst)
+	t_st	*tmp;
+	tmp = infix->prev;
+	while (tmp)
 	{
-		if (ft_strequ(lst->type, "operator") && \
-		(lst->op[0] == 'p' || lst->op[0] == 's' || lst->op[0] == 'u'))
-			ft_putstr(&lst->op[1]);
-		else
-			ft_putstr(lst->op);
-		lst = lst->next;
+		if (ft_strequ(tmp->type, "hash") || ft_strequ(tmp->type, "hexoct") \
+		|| ft_strequ(tmp->type, "integer") || ft_strequ(tmp->type, "intvar") \
+		|| ft_strequ(tmp->type, "intvar") || ft_strequ(tmp->type, "clbr") || \
+		tmp->op[0] == 's')
+		{
+			ft_print_error(SNERR, infix, begin);
+			return (0);
+		}
+		if (ft_strequ(tmp->type, "operator") && tmp->op[0] != '(' && \
+		tmp->op[0] != 'u' && tmp->op[0] != 'p')
+			break;
+		tmp = tmp->prev;
 	}
+	return (1);
 }
 
-void	ft_print_error(int error, t_st *infix, t_st *expr)
+static int	ft_pref_suf_check(t_st *infix, t_st *begin)
 {
-	write(1, "arx: ", 5);
-	ft_print_arx_token(expr);
-	if (error == INVOP)
-		write(1, ": syntax error: invalid arithmetic operator ", 44);
-	if (error == VTGFB)
-		write(1, ": value too great for base ", 27);
-	if (error == OPEXP)
-		write(1, ": syntax error: operand expected ", 34);
-	if (error == INVBA)
-		write(1, ": invalid arithmetic base ", 26);
-	if (error == INVNU)
-		write(1, ": invalid number ", 17); 
-	write(1, "(error token is \"", 17);
-	ft_print_arx_token(infix);
-	write(1, "\")\n", 3);
+	t_st	*tmp;
+	
+	tmp = ft_skip_space(infix->prev, 0);
+	if (infix->op[0] == 'p' && tmp)
+	{
+		if (!ft_strequ(tmp->type, "operator"))
+		{
+			ft_print_error(SNERR, infix, begin);
+			return (0);
+		}
+	}
+	/*tmp = ft_skip_space(infix->next, 1);
+	if (infix->op[0] == 's' && tmp)
+	{
+		if (!ft_strequ(tmp->type, "operator"))
+		{
+			ft_print_error(SNERR, tmp, begin);
+			return (0);
+		}
+	}*/
+	return (1);
 }
 
 static int	ft_operator_check(t_st *infix, t_st *begin)
 {
 	t_st	*tmp;
 
-	tmp = ft_skip_space(infix->prev, 0);
-
-	if ((!tmp || ft_strequ(tmp->type, "operator")) && \
-	(infix->op[0] != 'p' && infix->op[0] != 'u' && infix->op[0] != '('))	
+	if (infix->op[0] == 'p'/* || infix->op[0] == 's'*/)
 	{
-		ft_print_error(OPEXP, infix, begin);
-		return (0);
+		if (!ft_pref_suf_check(infix, begin))
+			return (0);
 	}
-	tmp = ft_skip_space(infix->next, 1);	
-	if (!tmp && infix->op[0] != 's')
+	else
 	{
-		ft_print_error(OPEXP, infix, begin);
-		return (0);
+		tmp = ft_skip_space(infix->prev, 0);
+		if ((!tmp || ft_strequ(tmp->type, "operator")) && (tmp->op[0] != 's' \
+		&& infix->op[0] != 'p' && infix->op[0] != 'u' && infix->op[0] != '('))	
+		{
+			ft_print_error(OPEXP, infix, begin);
+			return (0);
+		}
+		tmp = ft_skip_space(infix->next, 1);	
+		if (!tmp && infix->op[0] != 's')
+		{
+			ft_print_error(OPEXP, infix, begin);
+			return (0);
+		}
 	}
 	return (1);
 }
@@ -61,19 +83,14 @@ static t_st	*ft_error_checker(t_st *infix)
 	begin = infix;
 	while (infix)
 	{
-		if (ft_strequ(infix->type, "invop"))
+		if (ft_strequ(infix->type, "invop") || ft_strequ(infix->type, "invnum"))
 		{
-			ft_print_error(INVOP, infix, begin);
-			return (NULL);
-		}
-		if (ft_strequ(infix->type, "invnum"))
-		{
-			ft_print_error(VTGFB, infix, begin);
+			ft_print_error(ft_strequ(infix->type, "invop") ? INVOP : VTGFB, infix, begin);
 			return (NULL);
 		}
 		if (ft_strequ(infix->type, "hash") || ft_strequ(infix->type, "hexoct"))
 		{
-			if (!ft_base(infix, begin))
+			if (!ft_base(infix, begin, 0))
 				return (NULL);
 		}
 		if (ft_strequ(infix->type, "operator"))
@@ -81,8 +98,14 @@ static t_st	*ft_error_checker(t_st *infix)
 			if (!ft_operator_check(infix, begin))
 				return (NULL);
 		}
+		else if (!ft_strequ(infix->type, "clbr") && !ft_strequ(infix->type, "space"))
+		{
+			if (!ft_operand_check(infix, begin))
+				return (NULL);
+		}
 		infix = infix->next;
 	}
+	ft_base_calc(begin);
 	return (begin);
 }
 
