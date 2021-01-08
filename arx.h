@@ -12,6 +12,7 @@
 #define INVBA 4
 #define INVNU 5
 #define SNERR 6
+#define BVALS "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_"
 
 typedef struct	s_st
 {
@@ -73,6 +74,11 @@ void	ft_intvar(t_st *stack, char *op);
 */
 void	ft_operand(t_st **infix);
 
+/*
+** main.c
+*/
+void	ft_free_lst(t_st **lst);
+
 /* 
 ** plusminus.c 
 */
@@ -84,7 +90,7 @@ t_st	*ft_skip_space(t_st *link, const int move);
 */
 char	*ft_postfix(char *exp);
 int		ft_operator_str(char *op);
-t_st	*ft_itop_lst(t_st *infix);
+void	ft_itop_lst(t_st *infix, t_st **postfix);
 
 /* 
 ** utils.c 

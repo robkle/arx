@@ -1,5 +1,19 @@
 #include "arx.h"
 
+void	ft_free_lst(t_st **lst)
+{
+	t_st *tmp;
+	while (*lst)
+	{
+		tmp = (*lst)->next;
+		free((*lst)->op);
+		free((*lst)->type);
+		free(*lst);
+		*lst = tmp;
+	}
+	*lst = NULL;
+}
+
 int		ft_brackets(char *exp)
 {
 	char	stack[1024];
@@ -93,7 +107,7 @@ int	main(void)
 			{
 				if ((infix = ft_extolst(exp)))
 				{
-					postfix = ft_itop_lst(infix);
+					ft_itop_lst(infix, &postfix);
 					ft_print_exp(infix, postfix);
 					res = ft_calc(postfix);
 					printf("\nresult: %d\n", res);
@@ -103,10 +117,8 @@ int	main(void)
 				write(1, "Bracket error\n", 14);
 		}
 		free(exp);
+		ft_free_lst(&infix);
+		ft_free_lst(&postfix);
 	}
-	if (infix)
-		free(infix);
-	if (postfix)
-		free(postfix); 
-return (0);
+	return (0);
 }

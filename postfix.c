@@ -65,40 +65,40 @@ static int	ft_prcd_enum(char *left, char *right)
 		return (r >= l);
 }
 
-t_st	*ft_itop_lst(t_st *infix)
+static void	ft_op_to_postfix(t_st *infix, t_st **stack, t_st **postfix)
+{
+	while (*stack && ft_prcd_enum((*stack)->op, infix->op))
+	{
+		ft_push_lst(postfix, (*stack)->op, (*stack)->type);
+		ft_pop_stack(stack);
+	}
+	if (ft_strequ(infix->op,")"))
+		ft_pop_stack(stack);
+	else
+		ft_push_stack(stack, infix->op, infix->type);
+}
+
+void	ft_itop_lst(t_st *infix, t_st **postfix)
 {
 	t_st	*stack;
-	t_st	*postfix;
 	
 	stack = NULL;
-	postfix = NULL;
 	while (infix)	
 	{
 		if (!ft_operator_str(infix->op) && !ft_strequ(infix->type, "space"))
-			ft_push_lst(&postfix, infix->op, infix->type);
+			ft_push_lst(postfix, infix->op, infix->type);
 		else if (!ft_strequ(infix->type, "space"))
 		{
 			if (!stack)
 				ft_push_stack(&stack, infix->op, infix->type);
 			else
-			{
-				while (stack && ft_prcd_enum(stack->op, infix->op))
-				{
-					ft_push_lst(&postfix, stack->op, stack->type);
-					ft_pop_stack(&stack);
-				}
-				if (ft_strequ(infix->op,")"))
-					ft_pop_stack(&stack);
-				else
-					ft_push_stack(&stack, infix->op, infix->type);
-			}
+				ft_op_to_postfix(infix, &stack, postfix);
 		}
 		infix = infix->next;
 	}
 	while (stack)
 	{
-		ft_push_lst(&postfix, stack->op, stack->type);
+		ft_push_lst(postfix, stack->op, stack->type);
 		ft_pop_stack(&stack);
 	}
-	return (postfix);
 }

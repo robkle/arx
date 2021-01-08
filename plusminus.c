@@ -1,25 +1,5 @@
 #include "arx.h"
 
-/*static int	ft_pm_error(t_st *infix)
-{
-	t_st	*tmp;
-	while (infix)
-	{
-		if (((ft_strequ(infix->op, "p++") || ft_strequ(infix->op, "p--")) && \
-		(tmp = infix->prev)) || ((ft_strequ(infix->op, "s++") || \
-		ft_strequ(infix->op, "s--")) && (tmp = infix->next)))
-		{
-			if (!ft_strequ(tmp->type, "operator"))
-			{
-				write(1, "syntax error in expression\n", 28);
-				return (0);
-			}
-		}
-		infix = infix->next;
-	}
-	return (1);
-}*/
-
 t_st	*ft_skip_space(t_st *link, const int move)
 {
 	while (link && ft_strequ(link->type, "space"))
@@ -113,8 +93,7 @@ static void	ft_pm_split(t_st *infix, char *spec, int size)
 	if (ft_strequ(spec, "s"))
 	{
 		split[0] = ft_strjoin(spec, ft_strsub(infix->op, 0, 2));
-		split[1] = ft_strdup(&infix->op[2]);
-		ft_pm_addnew(infix, split[1], "plusminus");
+		ft_pm_addnew(infix, &infix->op[2], "plusminus");
 		ft_modify_link(infix, split[0], "operator");
 	}
 	else if (ft_strequ(spec, "p"))
@@ -123,17 +102,16 @@ static void	ft_pm_split(t_st *infix, char *spec, int size)
 		split[1] = ft_strjoin(spec, ft_strdup(&infix->op[size - 2]));
 		ft_pm_addnew(infix, split[1], "operator");
 		ft_modify_link(infix, split[0], "plusminus");
+		free(split[1]);
 	}
 	else if (!spec || ft_strequ(spec, "u"))
 	{
-		split[0] = spec ? ft_strjoin(spec, ft_strsub(infix->op, 0, 1)) :
+		split[0] = spec ? ft_strjoin(spec, ft_strsub(infix->op, 0, 1)) : \
 		ft_strsub(infix->op, 0, 1);
-		split[1] = ft_strdup(&infix->op[1]);
-		ft_pm_addnew(infix, split[1], "plusminus");
+		ft_pm_addnew(infix, &infix->op[1], "plusminus");
 		ft_modify_link(infix, split[0], "operator");
 	}
 	free(split[0]);
-	free(split[1]);
 }
 
 static void	ft_pm_create(t_st *infix, char *spec)

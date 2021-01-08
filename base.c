@@ -2,29 +2,26 @@
 
 static int	ft_atoi_base(t_st *infix, char *value, int base, int calc)
 {
-	char			*bvals;
 	int				i;
-	int				j;
 	long long int	res;
 	
-	bvals = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_";
 	res = 0;
-	if (value)
+	if (value && *value)
 	{
-		i = -1;
-		while (value[++i])
+		while (*value)
 		{
-			j = -1;
-			while (++j < base)
+			i = -1;
+			while (++i < base)
 			{
-				if (bvals[j] == value[i])
+				if (BVALS[i] == *value)
 				{
-					res	= base * res + j;
+					res	= base * res + i;
 					break;
 				}
 			}
-			if (j == base)
+			if (i == base)
 				return (0);
+			value++;
 		}
 	}
 	if (calc)

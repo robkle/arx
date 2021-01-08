@@ -36,15 +36,6 @@ static int	ft_pref_suf_check(t_st *infix, t_st *begin)
 			return (0);
 		}
 	}
-	/*tmp = ft_skip_space(infix->next, 1);
-	if (infix->op[0] == 's' && tmp)
-	{
-		if (!ft_strequ(tmp->type, "operator"))
-		{
-			ft_print_error(SNERR, tmp, begin);
-			return (0);
-		}
-	}*/
 	return (1);
 }
 
@@ -52,7 +43,7 @@ static int	ft_operator_check(t_st *infix, t_st *begin)
 {
 	t_st	*tmp;
 
-	if (infix->op[0] == 'p'/* || infix->op[0] == 's'*/)
+	if (infix->op[0] == 'p')
 	{
 		if (!ft_pref_suf_check(infix, begin))
 			return (0);
@@ -60,8 +51,9 @@ static int	ft_operator_check(t_st *infix, t_st *begin)
 	else
 	{
 		tmp = ft_skip_space(infix->prev, 0);
-		if ((!tmp || ft_strequ(tmp->type, "operator")) && (tmp->op[0] != 's' \
-		&& infix->op[0] != 'p' && infix->op[0] != 'u' && infix->op[0] != '('))	
+		if ((!tmp || (tmp && ft_strequ(tmp->type, "operator") && \
+		tmp->op[0] != 's')) && infix->op[0] != 'p' && infix->op[0] != 'u' && \
+		infix->op[0] != '(')	
 		{
 			ft_print_error(OPEXP, infix, begin);
 			return (0);
@@ -76,7 +68,27 @@ static int	ft_operator_check(t_st *infix, t_st *begin)
 	return (1);
 }
 
-static t_st	*ft_error_checker(t_st *infix)
+static int	ft_error_check(t_st *infix, t_st *begin)
+{
+	if (ft_strequ(infix->type, "hash") || ft_strequ(infix->type, "hexoct"))
+	{
+		if (!ft_base(infix, begin, 0))
+			return (0);
+	}
+	if (ft_strequ(infix->type, "operator"))
+	{
+		if (!ft_operator_check(infix, begin))
+			return (0);
+	}
+	else if (!ft_strequ(infix->type, "clbr") && !ft_strequ(infix->type, "space"))
+	{
+		if (!ft_operand_check(infix, begin))
+			return (0);
+	}
+	return (1);
+}
+
+static t_st	*ft_error_scan(t_st *infix)
 {
 	t_st	*begin;
 
@@ -85,24 +97,12 @@ static t_st	*ft_error_checker(t_st *infix)
 	{
 		if (ft_strequ(infix->type, "invop") || ft_strequ(infix->type, "invnum"))
 		{
-			ft_print_error(ft_strequ(infix->type, "invop") ? INVOP : VTGFB, infix, begin);
+			ft_print_error(ft_strequ(infix->type, "invop") ? INVOP : \
+			VTGFB, infix, begin);
 			return (NULL);
 		}
-		if (ft_strequ(infix->type, "hash") || ft_strequ(infix->type, "hexoct"))
-		{
-			if (!ft_base(infix, begin, 0))
-				return (NULL);
-		}
-		if (ft_strequ(infix->type, "operator"))
-		{
-			if (!ft_operator_check(infix, begin))
-				return (NULL);
-		}
-		else if (!ft_strequ(infix->type, "clbr") && !ft_strequ(infix->type, "space"))
-		{
-			if (!ft_operand_check(infix, begin))
-				return (NULL);
-		}
+		else if (!ft_error_check(infix, begin))
+			return (NULL);
 		infix = infix->next;
 	}
 	ft_base_calc(begin);
@@ -133,5 +133,5 @@ t_st	*ft_infix_checker(t_st *infix)
 	}
 	ft_operand(&begin);
 	ft_plusminus(&begin);
-	return (ft_error_checker(begin));
+	return (ft_error_scan(begin));
 }

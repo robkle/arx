@@ -29,9 +29,7 @@ void	ft_print_error(int error, t_st *infix, t_st *expr)
 		write(1, ": invalid number ", 17); 
 	if (error == SNERR)
 		write(1, ": syntax error in expression ", 28); 
-	write(1, " (error token is \"", 18);
+	write(1, "(error token is \"", 17);
 	ft_print_arx_token(infix);
 	write(1, "\")\n", 3);
-	//free(begin);
 }
-

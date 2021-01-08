@@ -36,6 +36,12 @@ static void	ft_op_parse(char *exp, int *i, char op[])
 		op[0] = exp[*i];
 }
 
+static void	ft_write_to_lst(t_st **infix, char arr[])
+{
+	ft_push_lst(infix, arr, NULL);
+	ft_bzero(arr, ft_strlen(arr));
+}
+
 t_st	*ft_extolst(char *exp)
 {
 	t_st	*infix;
@@ -51,21 +57,16 @@ t_st	*ft_extolst(char *exp)
 	{
 		if (ft_operator(exp[i]))
 			ft_op_parse(exp, &i, op);
-		else if (ft_isalnum(exp[i]) || exp[i] == '_' || exp[i] == '#' || exp[i] == '@')
+		else if (ft_isalnum(exp[i]) || exp[i] == '_' || exp[i] == '#' || \
+		exp[i] == '@')
 			ft_strncat(buf, &exp[i], 1);
-		else/* if (exp[i] != ' ' && exp[i] != '\t')*/
+		else
 			ft_strncat(op, &exp[i], 1);
 		if (op[0])
-		{
-			ft_push_lst(&infix, op, NULL);
-			ft_bzero(op, 64);
-		}
+			ft_write_to_lst(&infix, op);
 		if (buf[0] && !(ft_isalnum(exp[i + 1]) || exp [i + 1] == '_' || \
 		exp[i + 1] == '#' || exp[i + 1] == '@'))
-		{
-			ft_push_lst(&infix, buf, NULL);
-			ft_bzero(buf, 13);
-		}
+			ft_write_to_lst(&infix, buf);
 	}
 	return (ft_infix_checker(infix));
 }
