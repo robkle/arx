@@ -1,6 +1,6 @@
 # arx
 <h2>Arithmetic expansion</h2></br>
-The first version of a shell arithmetic expansion feature. It was integrated with a bash-like <a href=https://github.com/ihwang/42sh>shell</a></br> which forms part of my studies at Hive Helsinki.
+The first version of a shell arithmetic expansion feature. It was integrated with a bash-like <a href=https://github.com/ihwang/42sh>shell</a> which forms part of my studies at Hive Helsinki.</br>
 </br>
 The following operators are handled (in order or precedence):</br>
 
