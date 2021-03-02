@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arx.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rklein <rklein@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/02 14:59:11 by rklein            #+#    #+#             */
+/*   Updated: 2021/03/02 15:05:51 by rklein           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "arx.h"
 
 void	ft_free_lst(t_st **lst)
@@ -60,6 +72,9 @@ char	*read_exp(void)
 	return (ft_strdup(line));
 }
 
+/*
+** Creates an array of random variables for testing purposes
+*/
 static void	ft_intvar_tmp(void)
 {
 	g_iv = (char**)malloc(sizeof(char*) * 4);
@@ -92,7 +107,7 @@ int	main(void)
 	char	*exp;
 	t_st	*infix;
 	t_st	*postfix;
-	int		res;
+	char	*res;
 
 	ft_intvar_tmp();
 	infix = NULL;
@@ -109,8 +124,8 @@ int	main(void)
 				{
 					ft_itop_lst(infix, &postfix);
 					ft_print_exp(infix, postfix);
-					res = ft_calc(postfix);
-					printf("\nresult: %d\n", res);
+					if((res = ft_calc(postfix)))
+						printf("\nresult: %d\n", ft_atoi(res));
 				}
 			}
 			else

@@ -5,6 +5,7 @@ calc.c \
 checker.c \
 error.c \
 extolst.c \
+infix_format.c \
 intvar.c \
 operand.c \
 plusminus.c \
@@ -16,6 +17,7 @@ calc.o \
 checker.o \
 error.o \
 extolst.o \
+infix_format.o \
 intvar.o \
 operand.o \
 plusminus.o \

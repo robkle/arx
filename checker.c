@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checker.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rklein <rklein@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/02 14:59:40 by rklein            #+#    #+#             */
+/*   Updated: 2021/03/02 14:59:55 by rklein           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "arx.h"
 #include <stdio.h>
 
@@ -131,6 +143,7 @@ t_st	*ft_infix_checker(t_st *infix)
 			infix->type = ft_strdup("invop");
 		infix = infix->next;
 	}
+	ft_link_merge(&begin);
 	ft_operand(&begin);
 	ft_plusminus(&begin);
 	return (ft_error_scan(begin));

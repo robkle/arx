@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   arx.h                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rklein <rklein@student.hive.fi>            +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/03/02 14:58:46 by rklein            #+#    #+#             */
+/*   Updated: 2021/03/02 14:58:52 by rklein           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef ARX_H
 # define ARX_H
 
@@ -6,6 +18,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define XBUF 8
 #define INVOP 1
 #define VTGFB 2
 #define OPEXP 3
@@ -46,7 +59,7 @@ void	ft_base_calc(t_st *infix);
 /* 
 ** calc.c 
 */
-int		ft_calc(t_st *postfix);
+char	*ft_calc(t_st *postfix);
 
 /* 
 ** checker.c 
@@ -63,6 +76,11 @@ void	ft_print_error(int error, t_st *infix, t_st *expr);
 */
 int		ft_operator(char c);
 t_st	*ft_extolst(char *exp);
+
+/*
+** infix_format.c
+*/
+void	ft_link_merge(t_st **infix);
 
 /*
 ** intvar.c
